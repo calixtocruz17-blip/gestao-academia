@@ -1,19 +1,18 @@
-# Imagem do Python já pronta
 FROM python:3.9-slim
-
-# Local do código no Docker
 WORKDIR /app
 
-# Copiar para o Docker
+# Copia a lista de bibliotecas
 COPY requirements.txt .
-COPY main.py .
-COPY dados_academia.csv .
 
-# Instala as bibliotecas 
+# Copia o código da API
+COPY main.py .
+
+# NOVIDADE: Copia o banco de dados e o modelo treinado
+COPY dados_academia.csv .
+COPY modelo_churn_academia.pkl . 
+
+# Instala tudo
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Avisa que a IA vai rodar na porta 8000
 EXPOSE 8000
-
-# Comando para ligar a IA
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
